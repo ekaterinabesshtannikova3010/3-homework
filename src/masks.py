@@ -1,4 +1,4 @@
-number = input("Введите номер карты: ")
+#number = input("Введите номер карты: ")
 
 
 def get_mask_card_number(number) -> str:
@@ -16,10 +16,10 @@ def get_mask_card_number(number) -> str:
     return fin
 
 
-print(get_mask_card_number(number))
-
-
-score = input("Введите номер счета: ")
+# print(get_mask_card_number(number))
+#
+#
+# score = input("Введите номер счета: ")
 
 
 def get_mask_account(score) -> str:
@@ -37,4 +37,4 @@ def get_mask_account(score) -> str:
     return final_string
 
 
-print(get_mask_account(score))
+#print(get_mask_account(score))
