@@ -1,21 +1,21 @@
 from datetime import datetime
 from typing import Any
 
-import masks
+from .masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(string: str) -> Any:
     """Функция, маскирующая счета и карты"""
     if "Счет " in string:
         account = string[-20:]
-        return string[:-20] + masks.mask_account(account)
+        return string[:-20] + get_mask_account(account)
     else:
         cardnumber = "".join(string[-16:].split())
-        return string[:-16] + masks.mask_card_number(cardnumber)
+        return string[:-16] + get_mask_card_number(cardnumber)
 
 
-def get_data(date: str) -> str:
-    """Функция преобразующая дату формат даты"""
-    date_it = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S:%f")
-    formated_date = date_it.strptime("%d.%m.%Y")
-    return formated_date
+def get_data(date_str: str) -> str:
+    """Функция, возвращающая строку с датой в формате DD.MM.YYYY """
+    no_format_date = datetime.strptime(date_str[:10], ("%Y-%m-%d"))
+    format_date = no_format_date.strftime("%d.%m.%Y")
+    return format_date

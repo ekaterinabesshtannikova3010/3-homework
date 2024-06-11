@@ -1,9 +1,7 @@
-from datetime import datetime
+def get_data(date_str: str) -> str:
+    """Функция, возвращающая строку с датой в формате DD.MM.YYYY """
+    no_format_date = datetime.strptime(date_str[:10], ("%Y-%m-%d"))
+    format_date = no_format_date.strftime("%d.%m.%Y")
+    return format_date
 
-def get_data(date: str) -> str:
-    """Функция преобразующая дату формат даты"""
-    date_it = datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%S:%f")
-    formated_date = date_it.strptime("%d.%m.%Y")
-    return formated_date
-
-print(get_data(2018-07-11T02:26:18.671407))
+print(get_data)
