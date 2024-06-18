@@ -16,4 +16,3 @@ def sort_by_date(date_list: List[Dict], reverse: bool = True) -> List[Dict]:
     """Функция для сортировки словарей по убыванию."""
     sorted_list = sorted(date_list, key=lambda date_entry: date_entry['date'], reverse=reverse)
     return sorted_list
-
