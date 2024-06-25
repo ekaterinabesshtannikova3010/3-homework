@@ -90,9 +90,11 @@ def filter_by_currency(transactions, currency):
     """
     return (trans["id"] for trans in transactions if trans["operationAmount"]["currency"]["code"] == currency)
 
+
 usd_transactions = filter_by_currency(transactions, "USD")
 for x in usd_transactions:
     print(x)
+
 
 def transaction_descriptions(transactions):
     """
@@ -101,10 +103,12 @@ def transaction_descriptions(transactions):
     for transaction in transactions:
         yield transaction.get("description", "Описание отсутствует")
 
+
 descriptions = transaction_descriptions(transactions)
 
 for _ in range(5):
     print(next(descriptions))
+
 
 def format_card_number(card_number):
     """
@@ -112,12 +116,14 @@ def format_card_number(card_number):
     """
     return f"{card_number:016d}"
 
+
 def card_number_generator(start, end):
     """
     Функция-генератор номеров банковских карт.
     """
     for card_number in range(start, end + 1):
         yield format_card_number(card_number)
+
 
 # Пример использования
 for card_number in card_number_generator(1, 5):

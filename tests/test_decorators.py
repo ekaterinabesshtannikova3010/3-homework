@@ -1,38 +1,20 @@
-def log(filename=None):
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            try:
-                result = func(*args, **kwargs)
-                if filename:
-                    with open(filename, 'a') as file:
-                        file.write(f"{func.__name__} ok\n")
-                else:
-                    print(f"{func.__name__} ok")
-                return result
-            except Exception as e:
-                error_msg = f"{func.__name__} error: {type(e).__name__}. Inputs: {args}, {kwargs}"
-                if filename:
-                    with open(filename, 'a') as file:
-                        file.write(error_msg + '\n')
-                else:
-                    print(error_msg)
-                raise
-        return wrapper
-    return decorator
+from src.decorators import log
 
 
-@log(filename="mylog.txt")
-def my_function(x, y):
-    return x + y
-
-
-def test_my_function(capsys):
+def test_log(capsys):
     """
-    Тест для генератора.
+    Тестовая функция для декоратора log.
     """
-    with capsys.disabled():
-        result = my_function(1, 2)
-        captured = capsys.readouterr()
-        assert result == 3
-        assert captured.out == ''
-        assert captured.err == ''
+    @log(filename="mylog.txt")
+    def my_function(x, y):
+        return x + y
+
+    my_function(1, 2)
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == ""
+
+    with open("mylog.txt", "r") as f:
+        log_contents = f.read()
+        assert "my_function ok\n" in log_contents

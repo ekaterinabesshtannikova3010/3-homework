@@ -25,6 +25,7 @@ def test_transaction_descriptions():
 
     assert descriptions == expected
 
+
 @pytest.fixture
 def card_number_generator_fixture():
     def format_card_number(card_number):
@@ -35,6 +36,7 @@ def card_number_generator_fixture():
             yield format_card_number(card_number)
 
     return card_number_generator
+
 
 def test_card_number_generator(card_number_generator_fixture):
     """

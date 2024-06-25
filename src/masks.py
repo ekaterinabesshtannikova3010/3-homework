@@ -13,7 +13,6 @@ def get_mask_card_number(number) -> str:
     return fin
 
 
-
 def get_mask_account(score) -> str:
     """
     Вызываем функцию для создания маски
