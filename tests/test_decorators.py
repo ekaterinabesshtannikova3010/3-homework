@@ -1,20 +1,25 @@
 from src.decorators import log
+import pytest
 
 
-def test_log(capsys):
-    """
-    Тестовая функция для декоратора log.
-    """
-    @log(filename="mylog.txt")
-    def my_function(x, y):
-        return x + y
+@log(filename="mytlog.txt")
+def my_function(x, y):
+    return x / y
 
-    my_function(1, 2)
 
-    captured = capsys.readouterr()
-    assert captured.out == ""
-    assert captured.err == ""
+def test_correct_input():
+    """Тест на успешное окончание."""
+    log_file = "mytlog.txt"
+    result = my_function(10, 20)
+    assert result == 0.5
+    with open(log_file, "r") as f:
+        rdb = f.read()
+        assert "my_function ok" in rdb
 
-    with open("mylog.txt", "r") as f:
-        log_contents = f.read()
-        assert "my_function ok\n" in log_contents
+
+def test_incorrect_input():
+    """Тест на некорректный ввод данных."""
+    # log_file = "mytlog.txt"
+    with pytest.raises(TypeError):
+        result = my_function(0, 20)
+        assert "TypeError: unsupported operand type(s) for /: 'str' and 'int'" in result
