@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict, List
 
 
 def filter_by_state(list_of_dictionaries: List[Dict], state: str = "EXECUTED") -> List[Dict]:
@@ -14,5 +14,5 @@ def filter_by_state(list_of_dictionaries: List[Dict], state: str = "EXECUTED") -
 
 def sort_by_date(date_list: List[Dict], reverse: bool = True) -> List[Dict]:
     """Функция для сортировки словарей по убыванию."""
-    sorted_list = sorted(date_list, key=lambda date_entry: date_entry['date'], reverse=reverse)
+    sorted_list = sorted(date_list, key=lambda date_entry: date_entry["date"], reverse=reverse)
     return sorted_list

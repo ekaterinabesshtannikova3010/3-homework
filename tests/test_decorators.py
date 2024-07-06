@@ -1,5 +1,6 @@
-from src.decorators import log
 import pytest
+
+from src.decorators import log
 
 
 @log(filename="mytlog.txt")

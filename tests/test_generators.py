@@ -1,5 +1,6 @@
-from src.generators import transaction_descriptions
 import pytest
+
+from src.generators import transaction_descriptions
 
 
 def test_transaction_descriptions():
@@ -11,7 +12,7 @@ def test_transaction_descriptions():
         {"description": "Перевод со счета на счет"},
         {"description": "Перевод со счета на счет"},
         {"description": "Перевод с карты на карту"},
-        {"description": "Перевод организации"}
+        {"description": "Перевод организации"},
     ]
 
     descriptions = list(transaction_descriptions(transactions))
@@ -20,7 +21,7 @@ def test_transaction_descriptions():
         "Перевод со счета на счет",
         "Перевод со счета на счет",
         "Перевод с карты на карту",
-        "Перевод организации"
+        "Перевод организации",
     ]
 
     assert descriptions == expected
