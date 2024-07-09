@@ -1,3 +1,14 @@
+import logging
+
+logger = logging.getLogger("__name__")
+file_handler = logging.FileHandler("../logs/.log")
+file_formatter = logging.Formatter("%(asctime)s - %(module)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+logger.setLevel(logging.INFO)
+logger.info("The masking record is correct")
+
+
 def get_mask_card_number(number) -> str:
     """
     Вызываем функцию для создания маски
@@ -10,6 +21,7 @@ def get_mask_card_number(number) -> str:
             number_list[i] = "*"
     number_string = "".join(number_list)
     fin = number_string[0:4] + " " + number_string[4:8] + " " + number_string[8:12] + " " + number_string[12:16]
+    logging.info(f"Успешно замаскирована карта: {number}")
     return fin
 
 
