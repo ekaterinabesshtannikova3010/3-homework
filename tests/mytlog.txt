@@ -1,0 +1,5 @@
+my_function ok
+my_function ok
+my_function error: <class 'TypeError'>. Inputs: ('s', 20), {}
+my_function ok
+my_function ok
