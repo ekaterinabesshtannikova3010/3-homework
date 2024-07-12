@@ -49,7 +49,7 @@ def process_transaction(csv_file):
     new_col_order = ["id", "state", "date", "operationAmount", "description", "from", "to"]
     df_csv = df_csv[new_col_order]
     list_dict = df_csv.to_dict(orient="records")
-    return list_dict[3]
+    return list_dict
 
 
 # print(process_transaction(csv_file))
@@ -66,6 +66,6 @@ def processing_transaction(excel_file):
     new_col_order = ["id", "state", "date", "operationAmount", "description", "from", "to"]
     df_excel = df_excel[new_col_order]
     list_dict = df_excel.to_dict(orient="records")
-    return list_dict[0]
+    return list_dict
 
 # print(processing_transaction(excel_file))
