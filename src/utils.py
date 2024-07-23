@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import Any
 # import logging
-from src.config import ROOTPATH
+from config import ROOTPATH
 import pandas as pd
 
 # logger = logging.getLogger("__name__")
@@ -33,8 +33,6 @@ def read_json_file(file_path: Any) -> list[dict]:
 file_path = Path(ROOTPATH, "../data/operations.json")
 transactions = read_json_file(file_path)
 # print(transactions)
-
-
 csv_file = '../data/transactions.csv'
 
 def process_transaction():
@@ -51,6 +49,8 @@ def process_transaction():
 
 
 # print(process_transaction())
+
+
 
 
 excel_file = '../data/transactions_excel.xlsx'
