@@ -1,32 +1,33 @@
-import unittest
 from unittest.mock import patch
-from src.services import normalize_transactions
+from src.services import search_transactions
 
-@patch('src.services.normalize_transactions')
-def test_normalize_transactions():
-    mock_transactions = [
-        {"Описание": 123, "Категория": 456, "Номер карты": "1234", "Сумма операции": 100.0},
-        {"Описание": None, "Категория": "Покупки", "Номер карты": "5678", "Сумма операции": 50.0},
-        {"Описание": "Кафе", "Категория": None, "Номер карты": "9012", "Сумма операции": 75.0}
+
+def test_search_transactions_with_mock():
+    # Создаем тестовые данные
+    normal_transactions = [
+        {"Описание": "Покупка в магазине красоты", "Категория": "Красота"},
+        {"Описание": "Обед в кафе", "Категория": "Питание"},
+        {"Описание": "Поход в кино", "Категория": "Развлечения"},
+        {"Описание": "Покупка косметики", "Категория": "Красота"},
     ]
 
-    result = normalize_transactions(mock_transactions)
+    # Патчим функцию input(), чтобы вернуть тестовый запрос
+    with patch('builtins.input', return_value='Красота'):
+        # Вызываем функцию search_transactions() с тестовыми данными
+        result = search_transactions(normal_transactions)
+
+    # Проверяем, что функция вернула ожидаемый результат
     expected_result = [
-        {"Описание": "123", "Категория": "456", "Номер карты": "1234", "Сумма операции": 100.0},
-        {"Описание": "", "Категория": "Покупки", "Номер карты": "5678", "Сумма операции": 50.0},
-        {"Описание": "Кафе", "Категория": "", "Номер карты": "9012", "Сумма операции": 75.0}
+        {"Описание": "Покупка в магазине красоты", "Категория": "Красота"},
+        {"Описание": "Покупка косметики", "Категория": "Красота"},
     ]
-    assert result == expected_result
+    assert result == expected_result, f"Expected {expected_result}, but got {result}"
 
-
-@patch('src.views.list_transactions')
-def test_card_information(mock_list_transactions):
-    mock_list_transactions = {'cards': []}
-    expected_result = {'cards': []}
-    result = card_information()
-    assert result == expected_result
-
+    # Проверяем, что логирование было вызвано
+    with patch('logging.info') as mock_log_info:
+        search_transactions(normal_transactions)
+        mock_log_info.assert_called_once_with("Search by query: 'Красота'. Found 2 transactions.")
 
 
 if __name__ == '__main__':
-    test_normalize_transactions()
+    test_search_transactions_with_mock()

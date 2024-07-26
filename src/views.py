@@ -1,12 +1,14 @@
-import pandas as pd
 from pathlib import Path
 import requests
-import os
-from dotenv import load_dotenv
 import logging
-
+import os
+from src.utils import list_transactions
+from dotenv import load_dotenv
 
 ROOTPATH = Path(__file__).resolve().parent.parent
+load_dotenv()
+Api_1 = os.getenv("API_KEY_CURRENCY")
+Api_2 = os.getenv("api_key_2")
 
 logging.basicConfig(
     filename='app.log',
@@ -71,13 +73,12 @@ top = top_transaction(list_transactions)
 # print(top)
 
 
-api = "U2JDIP01ZL7AS9PL"
 symbols = ["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]
 stock_prices = []
 
 for symbol in symbols:
     """Вывод стоимости указанных акций(P.S.не больше 25 запросов в сутки,в остальном случае выводит "200")"""
-    url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={api}"
+    url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={Api_2}"
 
     response = requests.get(url)
     # print(response)
@@ -96,13 +97,13 @@ for symbol in symbols:
 stock = {"stock_prices": stock_prices}
 # print(stock)
 
-""""""
+"""Получение значений курса валют."""
 symbols = "EUR,USD,GBP,RUB"
 url = f"https://api.apilayer.com/exchangerates_data/latest?symbols={symbols}"
 
 payload = {}
 headers = {
-    "apikey": "03mmVsXS6y4lRrzEKToy0AINpbtQxKob"
+    "apikey": Api_1
 }
 response = requests.request("GET", url, headers=headers, data=payload)
 

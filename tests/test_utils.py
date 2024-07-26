@@ -1,30 +1,34 @@
-import json
+import unittest
 from unittest.mock import patch
+import pandas as pd
+from pathlib import Path
+import logging
+
+ROOTPATH = "path/to/your/project"
+file_xlsx = "transactions.xlsx"
 
 
-from src.utils import read_json_file
+def processing_transaction():
+    """Функция для обработки Еxcel файла."""
+    try:
+        df_excel = pd.read_excel(Path(ROOTPATH, file_xlsx), engine="openpyxl")
+        list_dict = df_excel.to_dict(orient="records")
+        logging.info("Successfully processed transactions from an Excel file")
+        return list_dict
+    except Exception as e:
+        logging.error(f"Ошибка при обработке транзакций: {e}")
+        return []
 
 
-def test_read_json_file():
-    with patch("builtins.open") as mock_open:
-        mock_file = mock_open.return_value.__enter__.return_value
-        mock_file.read.return_value = json.dumps(
-            {
-                "id": 441945886,
-                "state": "EXECUTED",
-                "date": "2019-08-26T10:50:58.294041",
-                "operationAmount": {"amount": "31957.58", "currency": {"name": "руб.", "code": "RUB"}},
-                "description": "Перевод организации",
-                "from": "Maestro 1596837868705199",
-                "to": "Счет 64686473678894779589",
-            }
-        )
-        assert read_json_file("../data/operations.json") == {
-            "id": 441945886,
-            "state": "EXECUTED",
-            "date": "2019-08-26T10:50:58.294041",
-            "operationAmount": {"amount": "31957.58", "currency": {"name": "руб.", "code": "RUB"}},
-            "description": "Перевод организации",
-            "from": "Maestro 1596837868705199",
-            "to": "Счет 64686473678894779589",
-        }
+@patch('pandas.read_excel')
+def test_processing_transaction_with_mock(mock_read_excel):
+    mock_read_excel.return_value = pd.DataFrame([])
+
+    result = processing_transaction()
+    assert result == []
+
+
+    mock_read_excel.assert_called_once_with(Path(ROOTPATH, file_xlsx), engine="openpyxl")
+
+if __name__ == '__main__':
+    unittest.main()

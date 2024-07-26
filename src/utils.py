@@ -1,9 +1,10 @@
 import pandas as pd
 from pathlib import Path
-import os
 import datetime
 from config import file_xlsx
 import logging
+
+ROOTPATH = Path(__file__).resolve().parent.parent
 logging.basicConfig(
     filename='app.log',
     filemode='w', level=logging.INFO,
@@ -28,6 +29,7 @@ list_transactions = processing_transaction()
 
 
 # print(list_transactions[1])
+
 
 def current_time():
     """Функция для получения текущего времени."""
@@ -68,4 +70,3 @@ def greeting():
 
 greeting_sms = greeting()
 # print(f'"{greeting_sms}"')
-

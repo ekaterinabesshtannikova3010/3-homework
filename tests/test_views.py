@@ -1,7 +1,4 @@
 import unittest
-from unittest import mock
-from pathlib import Path
-import pandas as pd
 from src.views import top_transaction, card_information
 from unittest.mock import patch
 
@@ -27,7 +24,7 @@ def test_top_transaction():
          'description': 'Перевод Кредитная карта. ТП 10.2 RUR'},
         {'date': '30.12.2021 17:50:17', 'amount': 174000.0, 'category': 'Пополнения',
          'description': 'Пополнение через Газпромбанк'},
-        {'date': '14.09.2021 14:57:42', 'amount': 150000.0, 'category': 'Пополнения', 'description': 'Перевод с карты'},
+     {'date': '14.09.2021 14:57:42', 'amount': 150000.0, 'category': 'Пополнения', 'description': 'Перевод с карты'},
         {'date': '31.07.2020 22:27:45', 'amount': 150000.0, 'category': 'Пополнения',
          'description': 'Перевод с карты'}]}
 
