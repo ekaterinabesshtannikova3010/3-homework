@@ -28,4 +28,4 @@ def get_expenses_by_category(list_normal, word, date=None):
 filtered = get_expenses_by_category(normal, category_word, user_date)
 
 total_expenses = sum(tx["Сумма операции"] for tx in filtered)
-print(f"Траты на {category_word} за последние 3 месяца с {user_date}: {total_expenses}")
+# print(f"Траты на {category_word} за последние 3 месяца с {user_date}: {total_expenses}")

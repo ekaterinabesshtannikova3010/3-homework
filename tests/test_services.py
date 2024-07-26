@@ -18,5 +18,15 @@ def test_normalize_transactions():
     ]
     assert result == expected_result
 
+
+@patch('src.views.list_transactions')
+def test_card_information(mock_list_transactions):
+    mock_list_transactions = {'cards': []}
+    expected_result = {'cards': []}
+    result = card_information()
+    assert result == expected_result
+
+
+
 if __name__ == '__main__':
     test_normalize_transactions()

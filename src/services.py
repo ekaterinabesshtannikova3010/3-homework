@@ -1,5 +1,5 @@
 import json
-from src.views import list_transactions
+from src.utils import list_transactions
 import logging
 
 logging.basicConfig(filename='app.log',
