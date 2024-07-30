@@ -1,4 +1,3 @@
-from src.utils import list_transactions
 import logging
 
 logging.basicConfig(filename='app.log',
@@ -26,25 +25,12 @@ def normalize_transactions(list_transactions):
     return transactions
 
 
-normal = normalize_transactions(list_transactions)
-
-
-# print(normal)
-
-
-def search_transactions(norm_transactions):
+def search_transactions(norm_transactions, query):
     """
     Функция для поиска транзакций по запросу.
     """
-    # query = input("Введите слово для поиска: ")
-    query = "Красота"
     filtered_transactions = [
         transaction for transaction in norm_transactions
         if query.lower() in transaction["Описание"].lower() or query.lower() in transaction["Категория"].lower()]
     logging.info(f"Search by query: '{query}'. Found {len(filtered_transactions)} transactions.")
     return filtered_transactions
-
-
-# Пример использования
-search_result = search_transactions(normal)
-# print(search_result)

@@ -1,4 +1,3 @@
-from src.services import normal
 import datetime
 import logging
 
@@ -7,8 +6,6 @@ logging.basicConfig(filename='app.log',
                     format='%(asctime)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
-user_date = "31.12.2021"
-category_word = "Супермаркеты"
 
 
 def get_expenses_by_category(list_normal, word, date=None):
@@ -26,7 +23,7 @@ def get_expenses_by_category(list_normal, word, date=None):
     return filtered_transactions
 
 
-filtered = get_expenses_by_category(normal, category_word, user_date)
-
-total_expenses = sum(tx["Сумма операции"] for tx in filtered)
-print(f"Траты на {"Супермаркеты"} за последние 3 месяца с {"31.12.2021"}: {total_expenses}")
+# filtered = get_expenses_by_category(normal, category_word, user_date)
+#
+# total_expenses = sum(tx["Сумма операции"] for tx in filtered)
+# print(f"Траты на {"Супермаркеты"} за последние 3 месяца с {"31.12.2021"}: {total_expenses}")

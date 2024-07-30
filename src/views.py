@@ -2,7 +2,7 @@ from pathlib import Path
 import requests
 import logging
 import os
-from src.utils import list_transactions
+from src.utils import processing_transaction
 from dotenv import load_dotenv
 
 ROOTPATH = Path(__file__).resolve().parent.parent
@@ -18,14 +18,14 @@ logging.basicConfig(
 )
 
 
-def card_information():
+def card_information(list_tr):
     """Функция для вывода информации по картам"""
     try:
         cards = []
-        unique_cards = set([transaction['Номер карты'] for transaction in list_transactions])
+        unique_cards = set([transaction['Номер карты'] for transaction in list_tr])
         for card_number in unique_cards:
             total_expenses = 0
-            for transaction in list_transactions:
+            for transaction in list_tr:
                 if transaction['Номер карты'] == card_number:
                     total_expenses += transaction['Сумма операции']
             cashback = abs(total_expenses // 100)
@@ -42,17 +42,17 @@ def card_information():
         logging.error(f"Ошибка при получении информации по картам: {e}")
         return {"cards": []}
 
-
-result = card_information()
+#
+# result = card_information()
 
 
 # print(result)
 
 
-def top_transaction(list_transactions):
+def top_transaction(my_list):
     """Функция для вывода топ-5 транзакций по сумме платежа"""
     try:
-        top_transactions = sorted(list_transactions, key=lambda x: x['Сумма платежа'], reverse=True)[:5]
+        top_transactions = sorted(my_list, key=lambda x: x['Сумма платежа'], reverse=True)[:5]
         result = {"top_transactions": []}
         for transaction in top_transactions:
             top_transaction = {
@@ -69,7 +69,7 @@ def top_transaction(list_transactions):
         return {"top_transactions": []}
 
 
-top = top_transaction(list_transactions)
+# top = top_transaction(list_transactions)
 # print(top)
 
 

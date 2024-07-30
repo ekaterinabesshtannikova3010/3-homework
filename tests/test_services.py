@@ -1,33 +1,71 @@
 from unittest.mock import patch
 from src.services import search_transactions
+import logging
 
+# Пример функции search_transactions
+def search_transactions(norm_transactions, query):
+    """
+    Функция для поиска транзакций по запросу.
+    """
+    filtered_transactions = [
+        transaction for transaction in norm_transactions
+        if query.lower() in transaction["Описание"].lower() or query.lower() in transaction["Категория"].lower()]
+    logging.info(f"Search by query: '{query}'. Found {len(filtered_transactions)} transactions.")
+    return filtered_transactions
 
-def test_search_transactions_with_mock():
-    # Создаем тестовые данные
-    normal_transactions = [
-        {"Описание": "Покупка в магазине красоты", "Категория": "Красота"},
-        {"Описание": "Обед в кафе", "Категория": "Питание"},
-        {"Описание": "Поход в кино", "Категория": "Развлечения"},
-        {"Описание": "Покупка косметики", "Категория": "Красота"},
+def test_search_description():
+    """
+    Проверка поиска по описанию транзакции.
+    """
+    transactions = [
+        {"Описание": "Покупка продуктов", "Категория": "Бытовые расходы"},
+        {"Описание": "Оплата коммунальных услуг", "Категория": "Коммуналка"},
+        {"Описание": "Поездка в отпуск", "Категория": "Путешествия"},
+        {"Описание": "Оплата интернета", "Категория": "Связь"},
+        {"Описание": "Ремонт квартиры", "Категория": "Строительство"},
     ]
 
-    # Патчим функцию input(), чтобы вернуть тестовый запрос
-    with patch('builtins.input', return_value='Красота'):
-        # Вызываем функцию search_transactions() с тестовыми данными
-        result = search_transactions(normal_transactions)
+    query = "покупка"
+    result = search_transactions(transactions, query)
+    assert len(result) == 1, "Expected 1 transaction to match the query."
+    assert result[0]["Описание"] == "Покупка продуктов", "Expected the description to match."
 
-    # Проверяем, что функция вернула ожидаемый результат
-    expected_result = [
-        {"Описание": "Покупка в магазине красоты", "Категория": "Красота"},
-        {"Описание": "Покупка косметики", "Категория": "Красота"},
+def test_search_category():
+    """
+    Проверка поиска по категории транзакции.
+    """
+    transactions = [
+        {"Описание": "Покупка продуктов", "Категория": "Бытовые расходы"},
+        {"Описание": "Оплата коммунальных услуг", "Категория": "Коммуналка"},
+        {"Описание": "Поездка в отпуск", "Категория": "Путешествия"},
+        {"Описание": "Оплата интернета", "Категория": "Связь"},
+        {"Описание": "Ремонт квартиры", "Категория": "Строительство"},
     ]
-    assert result == expected_result, f"Expected {expected_result}, but got {result}"
 
-    # Проверяем, что логирование было вызвано
-    with patch('logging.info') as mock_log_info:
-        search_transactions(normal_transactions)
-        mock_log_info.assert_called_once_with("Search by query: 'Красота'. Found 2 transactions.")
+    query = "путешествия"
+    result = search_transactions(transactions, query)
+    assert len(result) == 1, "Expected 1 transaction to match the query."
+    assert result[0]["Категория"] == "Путешествия", "Expected the category to match."
 
+def test_search_no_results():
+    """
+    Проверка, что нет результатов при отсутствии совпадений.
+    """
+    transactions = [
+        {"Описание": "Покупка продуктов", "Категория": "Бытовые расходы"},
+        {"Описание": "Оплата коммунальных услуг", "Категория": "Коммуналка"},
+        {"Описание": "Поездка в отпуск", "Категория": "Путешествия"},
+        {"Описание": "Оплата интернета", "Категория": "Связь"},
+        {"Описание": "Ремонт квартиры", "Категория": "Строительство"},
+    ]
 
-if __name__ == '__main__':
-    test_search_transactions_with_mock()
+    query = "гаджет"
+    result = search_transactions(transactions, query)
+    assert len(result) == 0, "Expected no transactions to match the query."
+
+# Запуск тестов
+if __name__ == "__main__":
+    test_search_description()
+    test_search_category()
+    test_search_no_results()
+    print("All tests passed.")

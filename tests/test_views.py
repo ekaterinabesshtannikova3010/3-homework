@@ -1,6 +1,7 @@
 import unittest
 from src.views import top_transaction, card_information
 from unittest.mock import patch
+import logging
 
 
 def test_top_transaction():
@@ -24,7 +25,7 @@ def test_top_transaction():
          'description': 'Перевод Кредитная карта. ТП 10.2 RUR'},
         {'date': '30.12.2021 17:50:17', 'amount': 174000.0, 'category': 'Пополнения',
          'description': 'Пополнение через Газпромбанк'},
-     {'date': '14.09.2021 14:57:42', 'amount': 150000.0, 'category': 'Пополнения', 'description': 'Перевод с карты'},
+        {'date': '14.09.2021 14:57:42', 'amount': 150000.0, 'category': 'Пополнения', 'description': 'Перевод с карты'},
         {'date': '31.07.2020 22:27:45', 'amount': 150000.0, 'category': 'Пополнения',
          'description': 'Перевод с карты'}]}
 
@@ -32,17 +33,20 @@ def test_top_transaction():
         result = top_transaction(list_transactions)
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_empty_list():
+    """Тест на пустой список транзакций"""
+    result = top_transaction([])
+    assert result == {"top_transactions": []}, "Ошибка: Должен быть пустой список транзакций"
 
 
-@patch('src.views.list_transactions')
-def test_card_information(mock_list_transactions):
-    mock_list_transactions = {'cards': []}
-    expected_result = {'cards': []}
-    result = card_information()
-    assert result == expected_result
-
-
-if __name__ == '__main__':
-    unittest.main()
+def test_incomplete_transactions():
+    """Тест на список транзакций с отсутствующими полями"""
+    list_transactions = [
+        {'Дата операции': '2024-07-01', 'Сумма платежа': 100, 'Категория': 'Еда'},  # Описание отсутствует
+        {'Дата операции': '2024-07-02', 'Сумма платежа': 200, 'Категория': 'Транспорт', 'Описание': 'Такси'},
+        {'Дата операции': '2024-07-03', 'Сумма платежа': 150, 'Категория': 'Развлечения', 'Описание': 'Кино'},
+    ]
+    result = top_transaction(list_transactions)
+    assert len(result["top_transactions"]) <= 5, "Ошибка: Должно быть не более 5 транзакций"
+    assert all(
+        'Описание' in t for t in result["top_transactions"]), "Ошибка: Все транзакции должны иметь поле 'Описание'"

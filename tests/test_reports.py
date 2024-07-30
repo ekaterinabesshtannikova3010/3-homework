@@ -21,5 +21,5 @@ def test_get_expenses_with_mock(mock_get_expenses_by_category):
     assert result == expected_result, f"Expected {expected_result}, but got {result}"
 
 
-if __name__ == '__main__':
-    unittest.main()
+ # if __name__ == '__main__':
+ #     unittest.main()

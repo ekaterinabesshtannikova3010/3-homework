@@ -25,11 +25,6 @@ def processing_transaction():
         return []
 
 
-list_transactions = processing_transaction()
-
-
-# print(list_transactions[1])
-
 
 def current_time():
     """Функция для получения текущего времени."""
@@ -42,11 +37,6 @@ def current_time():
         logging.error(f"Ошибка при получении текущего времени: {e}")
         return "00:00:00"
 
-
-formater = current_time()
-
-
-# print(formater)
 
 def greeting():
     """Функция для вывода приветствия в соответствии времени на данный момент"""
@@ -67,6 +57,3 @@ def greeting():
         logging.error(f"Ошибка при формировании приветствия: {e}")
         return "Приветствие"
 
-
-greeting_sms = greeting()
-# print(f'"{greeting_sms}"')
