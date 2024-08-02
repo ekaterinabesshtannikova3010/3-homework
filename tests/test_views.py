@@ -1,5 +1,5 @@
 import unittest
-from src.views import top_transaction, card_information
+from src.utils import top_transaction, card_information
 from unittest.mock import patch
 import logging
 
