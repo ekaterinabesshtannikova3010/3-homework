@@ -11,6 +11,7 @@ ROOTPATH = Path(__file__).resolve().parent.parent
 load_dotenv()
 Api_1 = os.getenv("API_KEY_CURRENCY")
 Api_2 = os.getenv("api_key_2")
+
 logging.basicConfig(
     filename='app.log',
     filemode='w', level=logging.INFO,
@@ -31,9 +32,9 @@ def processing_transaction():
         return []
 
 
-
 def current_time():
-    """Функция для получения текущего времени."""
+    """
+    Функция для получения текущего времени."""
     try:
         xt = datetime.datetime.now()
         formate_time = xt.strftime("%H:%M:%S")
@@ -88,6 +89,7 @@ def card_information(list_tr):
         logging.error(f"Ошибка при получении информации по картам: {e}")
         return {"cards": []}
 
+
 def top_transaction(my_list):
     """Функция для вывода топ-5 транзакций по сумме платежа"""
     try:
@@ -129,7 +131,7 @@ def get_currency_rates(api_key):
 
     except requests.exceptions.RequestException as e:
         print(f"Error during request: {e}")
-        return []  # Return empty list on error
+        return []
 
 
 def fetch_stock_prices(symbols, api_key):

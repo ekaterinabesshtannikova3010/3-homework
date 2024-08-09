@@ -1,8 +1,17 @@
-from src.views import formater, greeting_sms, card_information, stock_prices, rates
-from src.utils import processing_transaction, top_transaction
+from src.utils import (processing_transaction, top_transaction, current_time, greeting, card_information,
+                       fetch_stock_prices, get_currency_rates, Api_1)
 from src.services import normalize_transactions, search_transactions
 from src.reports import get_expenses_by_category
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 
+ROOTPATH = Path(__file__).resolve().parent.parent
+load_dotenv()
+symbols = os.getenv("symbols")
+
+formater = current_time()
+greeting_sms = greeting()
 print(formater)
 print(greeting_sms)
 
@@ -26,6 +35,13 @@ print(top)
 
 print(f"Траты на {category_word} за последние 3 месяца с {user_date}: {abs(total_expenses)}")
 print(search_result)
+
+symbol = symbols
+Api_2 = "ваш_ключ_здесь"
+stock_prices = fetch_stock_prices(symbol, Api_2)
+
+api_key = Api_1
+rates = get_currency_rates(api_key)
 
 print(stock_prices)
 print(rates)

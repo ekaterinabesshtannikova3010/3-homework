@@ -21,7 +21,7 @@ def normalize_transactions(list_transactions):
             **{k: v for k, v in transaction.items() if k not in ["Описание", "Категория"]}
         }
         transactions.append(trans)
-        # logging.info("The values for the key to a single data type are given")
+        logging.info("The values for the key to a single data type are given")
     return transactions
 
 
