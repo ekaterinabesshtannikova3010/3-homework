@@ -1,10 +1,11 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
 import pandas as pd
 from pathlib import Path
 from src.utils import top_transaction, current_time, card_information, fetch_stock_prices, get_currency_rates
 import datetime
 import pytest
+import json
 
 ROOTPATH = "path/to/your/project"
 file_xlsx = "transactions.xlsx"
@@ -102,25 +103,9 @@ def test_fetch_stock_prices_empty_symbols():
     symbols = []
     api_key = "your_api_key_here"
 
-    result = fetch_stock_prices(symbols, api_key)
+    result = fetch_stock_prices(symbols)
 
     assert result == []
-
-
-def test_get_currency_rates():
-    api_key = "your_api_key"
-    expected_currencies = ["EUR", "USD", "GBP", "RUB"]
-    currency_rates = get_currency_rates(api_key)
-    assert isinstance(currency_rates, list)
-    for currency_rate in currency_rates:
-        assert isinstance(currency_rate, dict)
-        assert "currency" in currency_rate
-        assert "rate" in currency_rate
-        assert currency_rate["currency"] in expected_currencies
-
-
-def test_empty_api_key():
-    assert get_currency_rates("") == []
 
 
 def test_single_transaction():
@@ -153,19 +138,55 @@ def test_current_time_invalid_time_handling():
         assert current_time() == "00:00:00"
 
 
-def test_invalid_api_key():
-    api_key = "invalid_api_key"
-    result = get_currency_rates(api_key)
-    assert result == []
 
 
-def test_fetch_stock_prices_invalid_api_key():
-    symbols = ["AAPL"]
-    response = fetch_stock_prices(symbols, "")
-    msg = 'Invalid API key'
-    for r in response:
-        if r['stock'] is not None and r['price'] is not None:
-            raise Exception(msg)
+FAKE_API_RESPONSE = {
+    "rates": {
+        "USD": 1.0,
+        "EUR": 0.85,
+        "GBP": 0.75
+    }
+}
+
+FAKE_USER_SETTINGS = {
+    "user_currencies": ["USD", "EUR", "GBP"]
+}
+
+
+@pytest.fixture
+def mock_requests_get():
+    with patch("requests.get") as mock_get:
+        yield mock_get
+
+
+@pytest.fixture
+def mock_open_file():
+    mock_file = mock_open(read_data=json.dumps(FAKE_USER_SETTINGS))
+    with patch("builtins.open", mock_file):
+        yield mock_file
+
+
+def test_get_currency_rates_no_currencies(mock_requests_get):
+    empty_settings = {"user_currencies": []}
+    mock_file = mock_open(read_data=json.dumps(empty_settings))
+    with patch("builtins.open", mock_file):
+        result = get_currency_rates()
+        assert result == []
+
+
+def test_get_currency_rates_success(mock_requests_get, mock_open_file):
+    mock_requests_get.return_value.status_code = 200
+    mock_requests_get.return_value.json.return_value = FAKE_API_RESPONSE
+
+    result = get_currency_rates()
+
+    expected_result = [
+        {"currency": "USD", "rate": 1.0},
+        {"currency": "EUR", "rate": 0.85},
+        {"currency": "GBP", "rate": 0.75}
+    ]
+
+    assert result == expected_result
 
 
 if __name__ == "__main__":

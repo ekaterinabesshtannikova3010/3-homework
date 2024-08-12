@@ -6,6 +6,7 @@ import requests
 import logging
 import os
 from dotenv import load_dotenv
+import json
 
 ROOTPATH = Path(__file__).resolve().parent.parent
 load_dotenv()
@@ -110,14 +111,15 @@ def top_transaction(my_list):
         return {"top_transactions": []}
 
 
-def get_currency_rates(api_key):
-    symbols = "EUR,USD,GBP,RUB"
+def get_currency_rates():
+    with open("../user_settings.json") as file:
+        symbols = ",".join(json.load(file)["user_currencies"])
     url = f"https://api.apilayer.com/exchangerates_data/latest?symbols={symbols}"
-    headers = {"apikey": api_key}
+    headers = {"apikey": Api_1}
 
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raises an HTTPError for bad response status
+        response.raise_for_status()
 
         result = response.json()
         currency_rates = []
@@ -134,18 +136,18 @@ def get_currency_rates(api_key):
         return []
 
 
-def fetch_stock_prices(symbols, api_key):
+def fetch_stock_prices(symbols):
     """
     Получает текущие цены акций для заданных символов.
     """
     stock_prices = []
 
     for symbol in symbols:
-        url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={api_key}"
+        url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={Api_2}"
 
         try:
             response = requests.get(url)
-            response.raise_for_status()  # Поднимает исключение для 4xx и 5xx ошибок
+            response.raise_for_status()
 
             result = response.json()
             stock_data = result.get("Global Quote", {})
